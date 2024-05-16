@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Home</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">HealthierMO</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/panel">Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Live Page</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Configuration
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                          <a class="dropdown-item" href="/panel/emergency">Emergency Preparedness and Response</a>
+                          <a class="dropdown-item" href="/panel/policy">Policy Development and Support</a>
+                          <a class="dropdown-item" href="/panel/communications">Communications</a>
+                          <a class="dropdown-item" href="/panel/community">Community partnership and Development</a>
+                          <a class="dropdown-item" href="/panel/organization">Organization Administrative Competencies</a>
+                          <a class="dropdown-item" href="/panel/accountability">Accountabilsity and Preformance Management</a>
+                          <a class="dropdown-item" href="/panel/assessment">Assessments and Surveillance</a>
+                          <a class="dropdown-item" href="/panel/inner">Inner Pie's</a>
+                          <a class="dropdown-item" href="/panel/misc">Misc</a>
+                        </div>
+                      </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- Page Content -->
+    <div class="container">
+        <div class="row">
+            <hr>
+            <div class="col-lg-12 text-center">
+                <h1 class="mt-5">HealthierMO Admin Panel</h1>
+                <p class="lead">Each box will serve as an input for all of the possible combinations of each piece
+                    of information.</p>
+                <hr>
+                <h2 th:text="'Currently Updating: ' + ${pageTitle}"></h2>
+
+                <form th:action="@{/save/} + ${pageShortName}" method="POST" enctype="multipart/form-data" modelAttribute="configForm" th:object="${configForm}">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_message">Enviromental Public Health</label>
+
+                                <input type="text" class="form-control"  th:field="*{envTitle}" placeholder="Enter Title">
+
+                                <textarea th:field="*{envText}" id="envText" path="envText" class="form-control" placeholder="Insert your information for the popup here!"
+                                    rows="4" data-error="Please, leave us a message."></textarea>
+                                <div class="help-block with-errors"></div>
+
+                                <p class = "text-justify">Play current audio file:</p>
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-primary pull-left audio-btn" id="ENVIRONMENT">Play Audio</button>
+                                </div>
+                                <p class="text-justify">Upload Audio File for Box: </p>
+
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="envFile" path="envFile"  th:field="*{envFile}" accept="audio/*" >
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_message">Communicable Disease Control</label>
+                                <input type="text" class="form-control"  th:field="*{communicableDiseaseTitle}" placeholder="Enter Title">
+
+                                <textarea th:field="*{communicableDiseaseText}" id="communicableDiseaseText" class="form-control" placeholder="Insert your information for the popup here!"
+                                    rows="4" data-error="Please, leave us a message."></textarea>
+                                <div class="help-block with-errors"></div>
+
+                                <p class = "text-justify">Play current audio file:</p>
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-primary pull-left audio-btn" id="COMMUNICABLE">Play Audio</button>
+                                </div>
+                                <p class="text-justify">Upload Audio File for Box: </p>
+
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="communicableDiseaseFile" th:field="*{communicableDiseaseFile}" accept="audio/*" >
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_message">Maternal, Child, and Family Health</label>
+                                
+                                <input type="text" class="form-control"  th:field="*{maternalTitle}" placeholder="Enter Title">
+
+
+                                <textarea th:field="*{maternalText}" id="maternalText" path="maternalText" class="form-control" placeholder="Insert your information for the popup here!"
+                                    rows="4" data-error="Please, leave us a message."></textarea>
+                                <div class="help-block with-errors"></div>
+
+                                <p class = "text-justify">Play current audio file:</p>
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-primary pull-left audio-btn" id="MATERNAL">Play Audio</button>
+                                </div>
+                                <p class="text-justify">Upload Audio File for Box: </p>
+
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="maternalFile" path="maternalFile"  th:field="*{maternalFile}" accept="audio/*" >
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_message">Chronic Disease Prevention</label>
+
+                                <input type="text" class="form-control"  th:field="*{chronicTitle}" placeholder="Enter Title">
+
+
+                                <textarea th:field="*{chronicText}" id="chronicText" class="form-control" placeholder="Insert your information for the popup here!"
+                                    rows="4" data-error="Please, leave us a message."></textarea>
+                                <div class="help-block with-errors"></div>
+
+                                <p class = "text-justify">Play current audio file:</p>
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-primary pull-left audio-btn" id="CHRONIC">Play Audio</button>
+                                </div>
+                                <p class="text-justify">Upload Audio File for Box: </p>
+
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="chronicFile" th:field="*{chronicFile}" accept="audio/*" >
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_message">Injury Prevention</label>
+
+                                <input type="text" class="form-control"  th:field="*{injuryTitle}" placeholder="Enter Title">
+
+                                <textarea th:field="*{injuryText}" id="injuryText" path="injuryText" class="form-control" placeholder="Insert your information for the popup here!"
+                                    rows="4" data-error="Please, leave us a message."></textarea>
+                                <div class="help-block with-errors"></div>
+
+                                <p class = "text-justify">Play current audio file:</p>
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-primary pull-left audio-btn" id="INJRUY">Play Audio</button>
+                                </div>
+                                <p class="text-justify">Upload Audio File for Box: </p>
+
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="injuryFile" path="injuryFile"  th:field="*{injuryFile}" accept="audio/*" >
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form_message">Linkage to Medical Behavior and Community Resources</label>
+                                <input type="text" class="form-control"  th:field="*{linkageTitle}" placeholder="Enter Title">
+
+                                <textarea th:field="*{linkageText}" id="linkageText" class="form-control" placeholder="Insert your information for the popup here!"
+                                    rows="4" data-error="Please, leave us a message."></textarea>
+                                <div class="help-block with-errors"></div>
+
+                                <p class = "text-justify">Play current audio file:</p>
+                                <div class="text-left">
+                                    <button type="button" class="btn btn-primary pull-left audio-btn" id="LINKAGE">Play Audio</button>
+                                </div>
+                                <p class="text-justify">Upload Audio File for Box: </p>
+
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="linkageFile" th:field="*{linkageFile}" accept="audio/*" >
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="submit-btn" class="btn btn-primary" type="submit">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioFile" preload="none" src=""></audio>
+
+    </div>
+    <!-- Bootstrap core JavaScript --> 
+    <script src="/vendor/jquery/jquery.slim.min.js"></script>
+    <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script th:inline="javascript">
+
+        var audioPlaying = false; 
+        // Add the following code if you want the name of the file appear on select
+        $(".custom-file-input").on("change", function() {
+          var fileName = $(this).val().split("\\").pop();
+          $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+        });
+        
+        $( document ).ready(function() {
+            $("#audioFile").on("error", function (e) {
+                alert("No wav file found.");
+
+                $('#audioFile').get(0).pause();
+                $('#audioFile').get(0).currentTime = 0;
+                audioPlaying = false;
+                $(this).text("Play Audio")
+                $(this).removeClass("btn-danger")
+                $(this).addClass("btn-primary")
+            });
+        });
+
+
+        $(":button").click(function() {
+            console.log("Button click.")
+            var clickedBtnID = $(this).attr('id'); 
+            console.log(clickedBtnID)
+            if($(this).hasClass("audio-btn")) {
+                
+                if(audioPlaying) {
+                    console.log("Audio playing. Stoping.")
+                    $('#audioFile').get(0).pause();
+                    $('#audioFile').get(0).currentTime = 0;
+                    audioPlaying = false;
+                    $(this).text("Play Audio")
+                    $(this).removeClass("btn-danger")
+                    $(this).addClass("btn-primary")
+                } else {
+                    console.log("Starting to play audio file.")
+                    var box = [[${pageShortName}]];
+                    var pie = clickedBtnID
+
+                    $(this).removeClass("btn-primary")
+                    $(this).addClass("btn-danger")
+                    $(this).text("Stop Audio")
+                    
+                    try { 
+                        document.getElementById("audioFile").src = "/audio-files/" + box + "-" + pie + ".wav";
+                        console.log(document.getElementById("audioFile").src)
+                        $('#audioFile').get(0).play()
+                        $('#audioFile').get(0).volume = 0.1;
+                    } catch (e) {
+                        $(this).text("Play Audio")
+                        $(this).removeClass("btn-danger")
+                        $(this).addClass("btn-primary")
+                    }
+                    
+                    audioPlaying = true;
+                   
+                   
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
