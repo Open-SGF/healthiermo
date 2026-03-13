@@ -1,4 +1,3 @@
-
 var textInfo = {}
 
 function loadText() {
@@ -37,12 +36,12 @@ function getText(box, pie) {
                 let linkLiteral = split[1]
 
                 let newLink = `<a href=\"${linkLiteral}\" target="_blank">${linkText}</a>`
-                console.log(newLink)
+                // console.log(newLink)
 
                 text = text.replace(text.substring(start, end + 1), newLink)
-                //console.log("Text now: "+ text)
+                //// console.log("Text now: "+ text)
 
-                if(!text.includes("[")) { 
+                if(!text.includes("[")) {
                     break
                 }
 
@@ -53,12 +52,12 @@ function getText(box, pie) {
             text = text.replace('\n', "<br>")
             text = text.replace('\r', "<br>")
 
-            console.log("Final:" + text)
+            // console.log("Final:" + text)
 
             return [info.title, text]
         }
     }
-    
+
     return ["Could not find text for the combination " + box + ":" + pie +". Please add within the panel.", ""];
 }
 loadText()
@@ -70,7 +69,7 @@ var modal = new tingle.modal({
             $('#audioFile').get(0).pause();
             $('#audioFile').get(0).currentTime = 0;
         }
-        console.log('close');
+        // console.log('close');
         isOpen = false;
     },
     onOpen: function() {
@@ -79,7 +78,7 @@ var modal = new tingle.modal({
     beforeOpen: function() {
     },
     beforeClose: function() {
-        console.log('before close');
+        // console.log('before close');
         return true;
     },
     cssClass: ['modalFont']
@@ -164,7 +163,7 @@ function interpolate(a, b, frac) {
 
 $(window).on('resize', function(){
     var size = window.innerHeight;
-    if (window.innerWidth < size) { 
+    if (window.innerWidth < size) {
         size = window.innerWidth;
     }
 
@@ -225,7 +224,7 @@ $(document).ready(function() {
     var currentRotation = 0;
 
     $("#coolcontainer").on("mousedown touchstart", function(event) {
-        
+
         if(isOpen) {
             return
         }
@@ -234,7 +233,7 @@ $(document).ready(function() {
 
         var pageX = event.pageX;
         var pageY = event.pageY;
-        
+
         if (event.type == "touchstart") {
             pageX = event.targetTouches[0].pageX;
             pageY = event.targetTouches[0].pageY;
@@ -263,79 +262,79 @@ $(document).ready(function() {
             var mouseUp = false;
             var checkOnMouseUp = function() {
                 if(mouseUp) {
-                    document.onmouseup = null; 
+                    document.onmouseup = null;
                 } else {
-                    document.ontouchend = null; 
+                    document.ontouchend = null;
                 }
-                
-                
+
+
                 if(onClickItem == "outer_ring") {
-                    
+
                     let box = "MISC"
                     let pie = "OUTER_RING"
-                    
+
                     document.getElementById("audioFile").src = "/audio-files/" + box + "-" + pie + ".wav";
-    
-                    console.log("Outer ring being called")
-                    
-                    
+
+                    // console.log("Outer ring being called")
+
+
                     let boxInfo = getText(box, pie)
-                    console.log(boxInfo)
+                    // console.log(boxInfo)
                     let title = boxInfo[0]
                     let text = boxInfo[1]
-    
+
                     modal.setContent(`
                     <h1>${title}</h1>
                     <p>${text}</p>
-                    `); 
-                
+                    `);
+
                     modal.open();
-                    
+
                     return
                 }
-                
+
                  if(onClickItem == "inner_ring") {
-                    
+
                     let box = "MISC"
-                    let pie = "INNER_RING"            
-                    
+                    let pie = "INNER_RING"
+
                     document.getElementById("audioFile").src = "/audio-files/" + box + "-" + pie + ".wav";
-    
-                    console.log("Inner ring being called");
-                    
+
+                    // console.log("Inner ring being called");
+
                     let boxInfo = getText(box, pie)
-                    console.log(boxInfo)
+                    // console.log(boxInfo)
                     let title = boxInfo[0]
                     let text = boxInfo[1]
-    
+
                     modal.setContent(`
                     <h1>${title}</h1>
                     <p>${text}</p>
-                    `); 
-                
+                    `);
+
                     modal.open();
-                    
+
                     return
                 }
-                    
-                
+
+
                 let box = "INNER"
                 let pie =  $.trim($("#" + onClickItem).attr("alt"))
-                
+
                 document.getElementById("audioFile").src = "/audio-files/" + box + "-" + pie + ".wav";
 
-                console.log("Box " + box + " Pie:" + pie)
-                
+                // console.log("Box " + box + " Pie:" + pie)
+
                 let boxInfo = getText(box, pie)
-                console.log(boxInfo)
+                // console.log(boxInfo)
                 let title = boxInfo[0]
                 let text = boxInfo[1]
 
                 modal.setContent(`
                 <h1>${title}</h1>
                 <p>${text}</p>
-                `); 
-            
+                `);
+
                 modal.open();
             };
 
@@ -352,22 +351,22 @@ $(document).ready(function() {
                 document.ontouchend = checkOnMouseUp;
             }
 
-            console.log("on click item:", onClickItem);
+            // console.log("on click item:", onClickItem);
             return;
         }
 
-        console.log("mousedown pre rotate", x, y);
+        // console.log("mousedown pre rotate", x, y);
 
         var rotatedXY = rotatePoint([x, y], [curRingWidth / 2, curRingHeight / 2], -currentRotation);
         x = rotatedXY[0];
         y = rotatedXY[1];
 
-        console.log("mousedown pre remap", x, y);
+        // console.log("mousedown pre remap", x, y);
 
         var newX = remap(x, 0, curRingWidth, 0, 2224);
         var newY = remap(y, 0, curRingHeight, 0, 2224);
 
-        console.log("mousedown post remap", newX, newY);
+        // console.log("mousedown post remap", newX, newY);
 
         var selectedItem = "";
         $.each(Object.keys(draggableItemLocations), function(idx, key){
@@ -436,7 +435,7 @@ $(document).ready(function() {
                 $(".innerpie").css("-webkit-filter", "");
                 $(".innerpie").css("filter", "");
                 $(".innerpie").css({zIndex: ''});
-                
+
                 $("#" + targetItem).css("z-index", "10000");
                 $("#" + targetItem).css("-webkit-filter", "drop-shadow(0px 0px 10px rgba(0, 0, 0, 1))");
                 $("#" + targetItem).css("filter", "drop-shadow(0px 0px 10px rgba(0, 0, 0, 1))");
@@ -474,9 +473,9 @@ $(document).ready(function() {
             }
 
             $(".outerring").css("-webkit-transform","rotate(" + a + "deg)");
-            highlightPieItem(); 
+            highlightPieItem();
         }
-        
+
 
         function closeDragElement(e) {
             // stop moving when mouse button is released:
@@ -485,27 +484,27 @@ $(document).ready(function() {
 
             var curRingWidth = $("#coolcontainer").width();
             var curRingHeight = $("#coolcontainer").height();
-            
+
             $("#" + selectedItem).css("-webkit-filter", "");
             $("#" + selectedItem).css("filter", "");
 
             $(".innerpie").css("-webkit-filter", "");
             $(".innerpie").css("filter", "");
             $(".innerpie").css({zIndex: ''});
-            
+
             if (currentRotation < 1 && currentRotation > -1) {
                 let name =  $("#" + selectedItem).attr("alt");
-                console.log("clicked item:", name);
+                // console.log("clicked item:", name);
 
                 let box = "OUTER"
                 let pie = name
 
                 document.getElementById("audioFile").src = "/audio-files/" + box + "-" + pie + ".wav";
 
-                console.log("Box " + box + " Pie:" + pie);
+                // console.log("Box " + box + " Pie:" + pie);
 
                 let boxInfo = getText(box, pie);
-                console.log(boxInfo);
+                // console.log(boxInfo);
                 let title = boxInfo[0];
                 let text = boxInfo[1];
 
@@ -515,23 +514,23 @@ $(document).ready(function() {
                 `);
                 modal.open();
 
-                
+
                 $(".outerring").css("-webkit-transform","rotate(0deg)");
                 currentRotation = 0;
                 return;
             }
 
             var currentFingerPoint = ringCenterPoints[selectedItem];
-            console.log("currentFingerPoint", currentFingerPoint);
+            // console.log("currentFingerPoint", currentFingerPoint);
 
-            console.log(curRingWidth, curRingHeight)
+            // console.log(curRingWidth, curRingHeight)
 
             var remappedFingerX = remap(currentFingerPoint[0], 0, 2224, 0, curRingWidth);
             var remappedFingerY = remap(currentFingerPoint[1], 0, 2224, 0, curRingHeight);
 
             var remappedFingerXY = [remappedFingerX, remappedFingerY];
 
-            console.log("post remap", remappedFingerXY);
+            // console.log("post remap", remappedFingerXY);
 
             remappedFingerXY = rotatePoint(remappedFingerXY, [curRingWidth / 2, curRingHeight / 2], currentRotation);
 
@@ -557,23 +556,23 @@ $(document).ready(function() {
 
             let box = $.trim($("#" + selectedItem).attr("alt"));
             let pie =  $.trim($("#" + targetItem).attr("alt"));
-            
+
             document.getElementById("audioFile").src = "/audio-files/" + box + "-" + pie + ".wav";
 
-            console.log("Box " + box + " Pie:" + pie);
-            
+            // console.log("Box " + box + " Pie:" + pie);
+
             let boxInfo = getText(box, pie);
-            console.log(boxInfo);
+            // console.log(boxInfo);
             let title = boxInfo[0];
             let text = boxInfo[1];
 
             modal.setContent(`
             <h1>${title}</h1>
             <p>${text}</p>
-            `); 
-        
+            `);
+
             modal.open();
-            
+
             $(".outerring").css("-webkit-transform","rotate(0deg)");
             currentRotation = 0;
         }
@@ -592,11 +591,11 @@ $(document).ready(function() {
         modal.setContent(`
         <h1>${title}</h1>
         <p>${text}</p>
-        `); 
+        `);
 
         modal.open();
-    
-    }); 
+
+    });
 
     var defaultSliderValue = 15;
     $( "#volume-vertical" ).slider({
@@ -607,10 +606,10 @@ $(document).ready(function() {
         value: defaultSliderValue,
         slide: function( event, ui ) {
             $( "#volumespan" ).text( ui.value );
-            
-            $('#audioFile').get(0).volume = (ui.value) / 100; 
-        
-            console.log(  $('#audioFile').get(0).volume)
+
+            $('#audioFile').get(0).volume = (ui.value) / 100;
+
+            // console.log(  $('#audioFile').get(0).volume)
         }
     });
     $( "#volumespan" ).text( defaultSliderValue );

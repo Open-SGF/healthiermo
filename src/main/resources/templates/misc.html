@@ -62,82 +62,42 @@
                 <h2 th:text="'Currently Updating: ' + ${pageTitle}"></h2>
 
                 <form action="/save/misc" method="POST" enctype="multipart/form-data" modelAttribute="miscForm" th:object="${miscForm}">
+
                     <div class="row">
-                        <div class="col-md-6">
+                        <div th:each="section, iterStat : *{sections}" class="col-md-6">
                             <div class="form-group">
-                                <label for="form_message">Outer Ring</label>
+                                <label th:text="${section.sectionTitle}"></label>
 
-                                <input type="text" class="form-control"  th:field="*{outerTitle}" placeholder="Enter Title">
+                                <input type="text" class="form-control"
+                                       th:field="*{sections[__${iterStat.index}__].title}"
+                                       placeholder="Enter Title">
 
-                                <textarea th:field="*{outerText}" id="outerText" path="outerText" class="form-control" placeholder="Insert your information for the popup here!"
-                                    rows="4" data-error="Please, leave us a message."></textarea>''
+                                <textarea class="form-control"
+                                          th:field="*{sections[__${iterStat.index}__].text}"
+                                          placeholder="Insert your information for the popup here!"
+                                          rows="4"></textarea>
                                 <div class="help-block with-errors"></div>
 
-                                <p class = "text-justify">Play current audio file:</p>
+                                <p class="text-justify">Play current audio file:</p>
                                 <div class="text-left">
-                                    <button type="button" class="btn btn-primary pull-left audio-btn" id="OUTER_RING">Play Audio</button>
+                                    <button type="button" class="btn btn-primary pull-left audio-btn"
+                                            th:id="${section.sectionKey}">Play Audio</button>
                                 </div>
-                                <p class="text-justify">Upload Audio File for Box: </p>
 
+                                <p class="text-justify">Upload Audio File for Box:</p>
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="outerFile" path="outerFile"  th:field="*{outerFile}" accept="audio/*" >
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                    <input type="file" class="custom-file-input"
+                                           th:id="${section.sectionKey + 'File'}"
+                                           th:field="*{sections[__${iterStat.index}__].file}"
+                                           accept="audio/*">
+                                    <label class="custom-file-label"
+                                           th:for="${section.sectionKey + 'File'}">Choose file</label>
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-md-6">
-                             <div class="form-group">
-                                 <label for="form_message">Inner Ring</label>
-                                 <input type="text" class="form-control"  th:field="*{innerTitle}" placeholder="Enter Title">
-
-                                 <textarea th:field="*{innerText}" id="innerText" class="form-control" placeholder="Insert your information for the popup here!"
-                                     rows="4" data-error="Please, leave us a message."></textarea>
-                                 <div class="help-block with-errors"></div>
-
-                                 <p class = "text-justify">Play current audio file:</p>
-                                 <div class="text-left">
-                                     <button type="button" class="btn btn-primary pull-left audio-btn" id="INNER_RING">Play Audio</button>
-                                 </div>
-                                 <p class="text-justify">Upload Audio File for Box: </p>
-
-                                 <div class="custom-file">
-                                     <input type="file" class="custom-file-input" id="innerFile" th:field="*{innerFile}" accept="audio/*" >
-                                     <label class="custom-file-label" for="customFile">Choose file</label>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                     <hr>
-
-                     <div class="row">
-                         <div class="col-md-6">
-                             <div class="form-group">
-                                 <label for="form_message">Help Button</label>
-
-                                 <input type="text" class="form-control"  th:field="*{helpTitle}" placeholder="Enter Title">
-
-                                 <textarea th:field="*{helpText}" id="helpText" path="helpText" class="form-control" placeholder="Insert your information for the popup here!"
-                                     rows="4" data-error="Please, leave us a message."></textarea>
-                                 <div class="help-block with-errors"></div>
-
-                                 <p class = "text-justify">Play current audio file:</p>
-                                 <div class="text-left">
-                                     <button type="button" class="btn btn-primary pull-left audio-btn" id="HELP">Play Audio</button>
-                                 </div>
-                                 <p class="text-justify">Upload Audio File for Box: </p>
-
-                                 <div class="custom-file">
-                                     <input type="file" class="custom-file-input" id="helpAudio" path="helpAudio"  th:field="*{helpAudio}" accept="audio/*" >
-                                     <label class="custom-file-label" for="customFile">Choose file</label>
-                                 </div>
-                             </div>
-                         </div>
-                         <div class="col-md-6">
-                        </div>
-
-
-                     <button id="submit-btn" class="btn btn-primary" type="submit">Submit</button>
+                    <button id="submit-btn" class="btn btn-primary" type="submit">Submit</button>
                  </form>
              </div>
          </div>

@@ -1,7 +1,7 @@
 # HealthierMO Website
 
-Configuration: applications.properties
+Configuration: applications.yaml
 
 ## Deployment
 mvn clean install
-java -jar target/whatever.jar
+
