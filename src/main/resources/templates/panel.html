@@ -13,42 +13,7 @@
 
 <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">HealthierMO</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
-                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="/panel">Home
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Live Page</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Configuration
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                          <a class="dropdown-item" href="/panel/emergency">Emergency Preparedness and Response</a>
-                          <a class="dropdown-item" href="/panel/policy">Policy Development and Support</a>
-                          <a class="dropdown-item" href="/panel/communications">Communications</a>
-                          <a class="dropdown-item" href="/panel/community">Community partnership and Development</a>
-                          <a class="dropdown-item" href="/panel/organization">Organization Administrative Competencies</a>
-                          <a class="dropdown-item" href="/panel/accountability">Accountabilsity and Preformance Management</a>
-                          <a class="dropdown-item" href="/panel/assessment">Assessments and Surveillance</a>
-                          <a class="dropdown-item" href="/panel/inner">Inner Pie's</a>
-                          <a class="dropdown-item" href="/panel/misc">Misc</a>
-                        </div>
-                      </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div th:replace="fragments/navbar :: navbar"></div>
     <!-- Page Content -->
     <div class="container">
         <div class="row">
@@ -60,15 +25,16 @@
                 <hr>
                 <h2 th:text="'Currently Updating: ' + ${pageTitle}"></h2>
 
-                <form th:action="@{/save/} + ${pageShortName}" method="POST" enctype="multipart/form-data" modelAttribute="configForm" th:object="${configForm}">
+                <form th:action="@{/save/{page}(page=${pageShortName})}" method="POST" enctype="multipart/form-data" modelAttribute="configForm" th:object="${configForm}">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="form_message">Enviromental Public Health</label>
+                                <label for="form_message">Environmental Public Health</label>
 
-                                <input type="text" class="form-control"  th:field="*{envTitle}" placeholder="Enter Title">
+                                <input type="hidden" th:field="*{sections[0].sectionKey}" th:value="ENVIRONMENT" />
+                                <input type="text" class="form-control" th:field="*{sections[0].title}" placeholder="Enter Title">
 
-                                <textarea th:field="*{envText}" id="envText" path="envText" class="form-control" placeholder="Insert your information for the popup here!"
+                                <textarea th:field="*{sections[0].text}" id="envText" class="form-control" placeholder="Insert your information for the popup here!"
                                     rows="4" data-error="Please, leave us a message."></textarea>
                                 <div class="help-block with-errors"></div>
 
@@ -79,7 +45,7 @@
                                 <p class="text-justify">Upload Audio File for Box: </p>
 
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="envFile" path="envFile"  th:field="*{envFile}" accept="audio/*" >
+                                    <input type="file" class="custom-file-input" id="envFile" th:field="*{sections[0].file}" accept="audio/*" >
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                             </div>
@@ -88,9 +54,10 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="form_message">Communicable Disease Control</label>
-                                <input type="text" class="form-control"  th:field="*{communicableDiseaseTitle}" placeholder="Enter Title">
+                                <input type="hidden" th:field="*{sections[1].sectionKey}" th:value="COMMUNICABLE_DISEASE" />
+                                <input type="text" class="form-control" th:field="*{sections[1].title}" placeholder="Enter Title">
 
-                                <textarea th:field="*{communicableDiseaseText}" id="communicableDiseaseText" class="form-control" placeholder="Insert your information for the popup here!"
+                                <textarea th:field="*{sections[1].text}" id="communicableDiseaseText" class="form-control" placeholder="Insert your information for the popup here!"
                                     rows="4" data-error="Please, leave us a message."></textarea>
                                 <div class="help-block with-errors"></div>
 
@@ -101,7 +68,7 @@
                                 <p class="text-justify">Upload Audio File for Box: </p>
 
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="communicableDiseaseFile" th:field="*{communicableDiseaseFile}" accept="audio/*" >
+                                    <input type="file" class="custom-file-input" id="communicableDiseaseFile" th:field="*{sections[1].file}" accept="audio/*" >
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                             </div>
@@ -113,11 +80,11 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="form_message">Maternal, Child, and Family Health</label>
-                                
-                                <input type="text" class="form-control"  th:field="*{maternalTitle}" placeholder="Enter Title">
 
+                                <input type="hidden" th:field="*{sections[2].sectionKey}" th:value="MATERNAL" />
+                                <input type="text" class="form-control" th:field="*{sections[2].title}" placeholder="Enter Title">
 
-                                <textarea th:field="*{maternalText}" id="maternalText" path="maternalText" class="form-control" placeholder="Insert your information for the popup here!"
+                                <textarea th:field="*{sections[2].text}" id="maternalText" class="form-control" placeholder="Insert your information for the popup here!"
                                     rows="4" data-error="Please, leave us a message."></textarea>
                                 <div class="help-block with-errors"></div>
 
@@ -128,7 +95,7 @@
                                 <p class="text-justify">Upload Audio File for Box: </p>
 
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="maternalFile" path="maternalFile"  th:field="*{maternalFile}" accept="audio/*" >
+                                    <input type="file" class="custom-file-input" id="maternalFile" th:field="*{sections[2].file}" accept="audio/*" >
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                             </div>
@@ -138,10 +105,10 @@
                             <div class="form-group">
                                 <label for="form_message">Chronic Disease Prevention</label>
 
-                                <input type="text" class="form-control"  th:field="*{chronicTitle}" placeholder="Enter Title">
+                                <input type="hidden" th:field="*{sections[3].sectionKey}" th:value="CHRONIC" />
+                                <input type="text" class="form-control" th:field="*{sections[3].title}" placeholder="Enter Title">
 
-
-                                <textarea th:field="*{chronicText}" id="chronicText" class="form-control" placeholder="Insert your information for the popup here!"
+                                <textarea th:field="*{sections[3].text}" id="chronicText" class="form-control" placeholder="Insert your information for the popup here!"
                                     rows="4" data-error="Please, leave us a message."></textarea>
                                 <div class="help-block with-errors"></div>
 
@@ -152,7 +119,7 @@
                                 <p class="text-justify">Upload Audio File for Box: </p>
 
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="chronicFile" th:field="*{chronicFile}" accept="audio/*" >
+                                    <input type="file" class="custom-file-input" id="chronicFile" th:field="*{sections[3].file}" accept="audio/*" >
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                             </div>
@@ -165,20 +132,21 @@
                             <div class="form-group">
                                 <label for="form_message">Injury Prevention</label>
 
-                                <input type="text" class="form-control"  th:field="*{injuryTitle}" placeholder="Enter Title">
+                                <input type="hidden" th:field="*{sections[4].sectionKey}" th:value="INJURY" />
+                                <input type="text" class="form-control" th:field="*{sections[4].title}" placeholder="Enter Title">
 
-                                <textarea th:field="*{injuryText}" id="injuryText" path="injuryText" class="form-control" placeholder="Insert your information for the popup here!"
+                                <textarea th:field="*{sections[4].text}" id="injuryText" class="form-control" placeholder="Insert your information for the popup here!"
                                     rows="4" data-error="Please, leave us a message."></textarea>
                                 <div class="help-block with-errors"></div>
 
                                 <p class = "text-justify">Play current audio file:</p>
                                 <div class="text-left">
-                                    <button type="button" class="btn btn-primary pull-left audio-btn" id="INJRUY">Play Audio</button>
+                                    <button type="button" class="btn btn-primary pull-left audio-btn" id="INJURY">Play Audio</button>
                                 </div>
                                 <p class="text-justify">Upload Audio File for Box: </p>
 
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="injuryFile" path="injuryFile"  th:field="*{injuryFile}" accept="audio/*" >
+                                    <input type="file" class="custom-file-input" id="injuryFile" th:field="*{sections[4].file}" accept="audio/*" >
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                             </div>
@@ -187,9 +155,10 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="form_message">Linkage to Medical Behavior and Community Resources</label>
-                                <input type="text" class="form-control"  th:field="*{linkageTitle}" placeholder="Enter Title">
+                                <input type="hidden" th:field="*{sections[5].sectionKey}" th:value="LINKAGE" />
+                                <input type="text" class="form-control" th:field="*{sections[5].title}" placeholder="Enter Title">
 
-                                <textarea th:field="*{linkageText}" id="linkageText" class="form-control" placeholder="Insert your information for the popup here!"
+                                <textarea th:field="*{sections[5].text}" id="linkageText" class="form-control" placeholder="Insert your information for the popup here!"
                                     rows="4" data-error="Please, leave us a message."></textarea>
                                 <div class="help-block with-errors"></div>
 
@@ -200,7 +169,7 @@
                                 <p class="text-justify">Upload Audio File for Box: </p>
 
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="linkageFile" th:field="*{linkageFile}" accept="audio/*" >
+                                    <input type="file" class="custom-file-input" id="linkageFile" th:field="*{sections[5].file}" accept="audio/*" >
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                             </div>

@@ -1,43 +1,41 @@
 package org.healthiermo.homepage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 @SpringBootApplication
-@ComponentScan(basePackages = {"org.healthiermo.homepage"})
 public class HomepageApplication {
+    private static final Logger log = LoggerFactory.getLogger(HomepageApplication.class);
 
 	public static void main(String[] args) {
-
-		Path currentRelativePath = Paths.get("");
-
-		Path currentDir = currentRelativePath.toAbsolutePath();
-		File file = new File(currentDir + "/src/main/resources/static/audio-files");
-		//This is gonna have to change for prod.
-
-		if (!file.exists()) {
-			if (file.mkdir()) {
-				System.out.println("Directory is created!");
-			} else {
-				System.out.println("Failed to create directory!");
-			}
-		}
-
 		SpringApplication.run(HomepageApplication.class, args);
 	}
 
-	@Bean(name = "multipartResolver")
-	public CommonsMultipartResolver multipartResolver() {
-		CommonsMultipartResolver multipartResolver = new CommonsMultipartResolver();
-		long size = 100000000000l;
-		multipartResolver.setMaxUploadSize(size);
-		return multipartResolver;
-	}
+    // Spring Boot functional interface that is used to execute logic right after the application fully initializes
+    @Bean
+    CommandLineRunner initAudioDirectory(
+            @Value("${app.audio-files.path:./audio-files}") String audioFilesPath) {
+        return args -> {
+            Path dir = Path.of(audioFilesPath);
+            if (Files.notExists(dir)) {
+                try {
+                    Files.createDirectories(dir);
+                    log.info("Audio files directory created: {}", dir.toAbsolutePath());
+                } catch (IOException e) {
+                    log.error("Failed to create audio files directory: {}", dir.toAbsolutePath(), e);
+                }
+            } else {
+                log.debug("Audio files directory already exists: {}", dir.toAbsolutePath());
+            }
+        };
+    }
 }

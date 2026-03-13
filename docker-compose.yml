@@ -1,0 +1,16 @@
+services:
+  db:
+    image: mysql:8
+    container_name: mysql_db
+    restart: always
+    environment:
+      MYSQL_DATABASE: healthiermo
+      MYSQL_ROOT_PASSWORD: asdfasdf44
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./backup/table_dump.sql:/docker-entrypoint-initdb.d/001_table_dump.sql:ro
+    ports:
+      - "3306:3306"
+
+volumes:
+  mysql-data:

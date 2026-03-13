@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- This file is just a fragment, so only the nav markup is included -->
+</head>
+<body>
+    <div th:fragment="navbar">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+            <div class="container">
+                <a class="navbar-brand" href="#">HealthierMO</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                    aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="/panel">Home
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Live Page</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Configuration
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="/panel/emergency">Emergency Preparedness and Response</a>
+                                <a class="dropdown-item" href="/panel/policy">Policy Development and Support</a>
+                                <a class="dropdown-item" href="/panel/communications">Communications</a>
+                                <a class="dropdown-item" href="/panel/community">Community partnership and Development</a>
+                                <a class="dropdown-item" href="/panel/organization">Organization Administrative Competencies</a>
+                                <a class="dropdown-item" href="/panel/accountability">Accountabilsity and Preformance Management</a>
+                                <a class="dropdown-item" href="/panel/assessment">Assessments and Surveillance</a>
+                                <a class="dropdown-item" href="/panel/inner">Inner Pie's</a>
+                                <a class="dropdown-item" href="/panel/misc">Misc</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</body>
+</html>

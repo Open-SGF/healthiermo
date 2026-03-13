@@ -1,7 +1,6 @@
-package org.healthiermo.homepage;
+package org.healthiermo.homepage.enums;
 
-public enum Pages {
-
+public enum PagesEnum {
     EMERGENCY("Emergency Preparedness and Response"),
     POLICY("Policy Development and Support"),
     COMMUNICATIONS("Communications"),
@@ -12,22 +11,12 @@ public enum Pages {
     INNER("Inner Clickage on Pie"),
     OUTER("Outer Ring Hotspots");
 
-    private String fullName;
+    private final String fullname;
 
-    Pages(String fullName) { 
-        this.fullName = fullName;
+    PagesEnum(String fullname) {
+        this.fullname = fullname;
     }
-
     public String getFullName() {
-        return fullName;
+        return fullname;
     }
-}
-
-enum Pie {
-    ENVIRONMENT,
-    COMMUNICABLE_DISEASE,
-    CHRONIC,
-    LINKAGE,
-    INJURY,
-    MATERNAL
 }
