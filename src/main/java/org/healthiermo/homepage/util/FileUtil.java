@@ -18,7 +18,7 @@ public class FileUtil {
 
     private static Path uploadPath;
 
-    @Value("${app.audio-files.path:./audio-files}")
+    @Value("${app.audio-files.path}")
     private String audioFilesPath;
 
 
