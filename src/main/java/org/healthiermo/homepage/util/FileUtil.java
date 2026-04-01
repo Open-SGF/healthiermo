@@ -1,5 +1,6 @@
 package org.healthiermo.homepage.util;
 
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,12 +17,14 @@ import java.nio.file.Path;
 public class FileUtil {
     private static final Logger log = LoggerFactory.getLogger(FileUtil.class);
 
-    private static Path uploadPath;
-
     @Value("${app.audio-files.path}")
-    private String audioFilesPath;
+    private Path uploadPath;
 
-
+    @PostConstruct
+    void init() throws IOException {
+        Files.createDirectories(uploadPath);
+        log.info("Upload directory initialized at: {}", uploadPath);
+    }
 
     /**
      * Handles file upload for a given section.
@@ -31,7 +34,7 @@ public class FileUtil {
      * @param page    the page identifier (e.g. "MISC", "OUTER")
      * @param section the section identifier (e.g. "OUTER_RING", "HELP")
      */
-    public static void handleFile(MultipartFile file, String page, String section) {
+    public void handleFile(MultipartFile file, String page, String section) {
         if (file == null || file.isEmpty()) {
             log.debug("Skipping empty file for: {}-{}", page, section);
             return;
@@ -57,11 +60,12 @@ public class FileUtil {
     /**
      * Saves the file to the upload directory.
      */
-    private static void saveFile(MultipartFile file, String filename) throws IOException {
-        Path targetLocation = uploadPath.resolve(filename);
+    private void saveFile(MultipartFile file, String filename) throws IOException {
+        log.info("Saving file in uploadPath: {}", uploadPath);
+        Path targetLocation = uploadPath.resolve(filename).normalize();
 
         // Security: ensure the file is within the upload directory (prevent path traversal)
-        if (!targetLocation.normalize().startsWith(uploadPath)) {
+        if (!targetLocation.startsWith(uploadPath)) {
             throw new IOException("Cannot store file outside upload directory: " + filename);
         }
 
@@ -74,7 +78,7 @@ public class FileUtil {
      * Extracts the file extension from a filename.
      * Returns empty string if no extension found.
      */
-    private static String getFileExtension(String filename) {
+    private String getFileExtension(String filename) {
         if (filename == null) {
             return "";
         }
@@ -89,7 +93,7 @@ public class FileUtil {
      * Sanitizes the filename to prevent path traversal attacks.
      * Result: {page}-{section}.{extension}
      */
-    private static String sanitizeFilename(String page, String section, String extension) {
+    private String sanitizeFilename(String page, String section, String extension) {
         // Remove any path separators or special characters
         String safePage = page.replaceAll("[^a-zA-Z0-9_-]", "");
         String safeSection = section.replaceAll("[^a-zA-Z0-9_-]", "");
