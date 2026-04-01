@@ -16,9 +16,11 @@ public class SectionService {
     private static final Logger log = LoggerFactory.getLogger(SectionService.class);
 
     private TextBoxRepository textBoxRepository;
+    private final FileUtil fileUtil;
 
-    public SectionService(TextBoxRepository textBoxRepository) {
+    public SectionService(TextBoxRepository textBoxRepository, FileUtil fileUtil) {
         this.textBoxRepository = textBoxRepository;
+        this.fileUtil = fileUtil;
     }
 
     /**
@@ -28,6 +30,7 @@ public class SectionService {
      * @param box  the box identifier (e.g. "MISC", "OUTER", or a page name)
      */
     public void saveAll(SectionForm form, String box) {
+        log.info("Saving {} sections for box: {}", form.getSections().size(), box);
         for (SectionEntry entry : form.getSections()) {
             String key = entry.getSectionKey();
             String text = entry.getText();
@@ -38,7 +41,7 @@ public class SectionService {
             }
 
             textBoxRepository.save(new TextBox(box, key, entry.getTitle(), text));
-            FileUtil.handleFile(entry.getFile(), box, key);
+            fileUtil.handleFile(entry.getFile(), box, key);
         }
     }
 
