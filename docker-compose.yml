@@ -14,7 +14,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./audio-files:/app/audio-files
+      - ./.data/audio-files:/data/audio-files
     restart: on-failure
 
   db:

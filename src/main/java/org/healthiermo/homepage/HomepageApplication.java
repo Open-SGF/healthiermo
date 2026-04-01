@@ -23,7 +23,7 @@ public class HomepageApplication {
     // Spring Boot functional interface that is used to execute logic right after the application fully initializes
     @Bean
     CommandLineRunner initAudioDirectory(
-            @Value("${app.audio-files.path:./audio-files}") String audioFilesPath) {
+            @Value("${app.audio-files.path}") String audioFilesPath) {
         return args -> {
             Path dir = Path.of(audioFilesPath);
             if (Files.notExists(dir)) {

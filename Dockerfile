@@ -14,8 +14,11 @@ RUN mvn clean package -DskipTests
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
+# Default runtime data root
+ENV APP_PUBLIC_DATA_ROOT=/data
+
 # Create directory for audio files
-RUN mkdir -p /app/audio-files
+RUN mkdir -p /data/audio-files
 
 # Copy the built JAR from build stage
 COPY --from=build /app/target/*.jar app.jar
