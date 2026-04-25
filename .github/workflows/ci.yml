@@ -55,6 +55,11 @@ jobs:
       - name: Prepare data directory
         run: mkdir -p .data/audio-files
 
+      - name: Import schema into MySQL
+        run: |
+          container_id=$(docker ps -q --filter "ancestor=mysql:8")
+          docker exec -i "$container_id" mysql -u root -prootpassword healthiermo < backup/table_dump.sql
+
       - name: Run tests
         env:
           SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/healthiermo?useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
