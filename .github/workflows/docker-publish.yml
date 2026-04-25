@@ -9,7 +9,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build:
@@ -45,16 +44,23 @@ jobs:
           PLATFORM_TAG=$(echo "${{ matrix.platform }}" | tr '/' '-')
           echo "tag=$PLATFORM_TAG" >> "$GITHUB_OUTPUT"
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
+          flavor: |
+            suffix=-${{ steps.platform.outputs.tag }},onlatest=false
+          tags: |
+            type=raw,value=${{ inputs.version }}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}-${{ steps.platform.outputs.tag }}
-          labels: |
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
-            org.opencontainers.image.revision=${{ github.sha }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ matrix.platform }}
           cache-to: type=gha,mode=max,scope=${{ matrix.platform }}
           platforms: ${{ matrix.platform }}
@@ -78,13 +84,45 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Docker meta (final tags)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
+          tags: |
+            type=raw,value=${{ inputs.version }}
+            type=raw,value=latest
+
+      - name: Docker meta (amd64 source)
+        id: meta-amd64
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
+          flavor: |
+            suffix=-linux-amd64,onlatest=false
+          tags: |
+            type=raw,value=${{ inputs.version }}
+
+      - name: Docker meta (arm64 source)
+        id: meta-arm64
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}
+          flavor: |
+            suffix=-linux-arm64,onlatest=false
+          tags: |
+            type=raw,value=${{ inputs.version }}
+
       - name: Create and push multi-arch manifest
         run: |
+          FINAL_TAGS=""
+          for tag in $(echo '${{ steps.meta.outputs.tags }}' | grep -v '^$'); do
+            FINAL_TAGS="$FINAL_TAGS -t $tag"
+          done
           docker buildx imagetools create \
-            -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }} \
-            -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}-linux-amd64 \
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.version }}-linux-arm64
+            $FINAL_TAGS \
+            ${{ steps.meta-amd64.outputs.tags }} \
+            ${{ steps.meta-arm64.outputs.tags }}
 
       - name: Add Docker image info to release
         uses: actions/github-script@v7
@@ -97,12 +135,14 @@ jobs:
               tag: tag
             });
 
-            const imageUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/pkgs/container/${context.repo.repo}`;
+            const owner = context.repo.owner.toLowerCase();
+            const repo = context.repo.repo.toLowerCase();
+            const imageUrl = `https://github.com/${owner}/${repo}/pkgs/container/${repo}`;
             const dockerSection = `## Docker Image\n\n` +
               `**Published:** ✅\n` +
-              `**Image:** \`ghcr.io/${context.repo.owner}/${context.repo.repo}:${{ inputs.version }}\`\n` +
-              `**Latest:** \`ghcr.io/${context.repo.owner}/${context.repo.repo}:latest\`\n\n` +
-              `Pull: \`docker pull ghcr.io/${context.repo.owner}/${context.repo.repo}:${{ inputs.version }}\`\n\n` +
+              `**Image:** \`ghcr.io/${owner}/${repo}:${{ inputs.version }}\`\n` +
+              `**Latest:** \`ghcr.io/${owner}/${repo}:latest\`\n\n` +
+              `Pull: \`docker pull ghcr.io/${owner}/${repo}:${{ inputs.version }}\`\n\n` +
               `[View on GitHub Container Registry](${imageUrl})`;
 
             await github.rest.repos.updateRelease({
