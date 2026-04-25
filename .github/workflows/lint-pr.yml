@@ -1,0 +1,41 @@
+name: Lint PR
+
+on:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+
+jobs:
+  main:
+    name: Validate PR title
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - uses: amannn/action-semantic-pull-request@v6
+        id: lint_pr_title
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: always() && (steps.lint_pr_title.outputs.error_message != null)
+        with:
+          header: pr-title-lint-error
+          message: |
+            PR title must follow [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/).
+
+            **Expected format:** `type: description` or `type!: description` for breaking changes.
+
+            **Error:**
+            ```
+            ${{ steps.lint_pr_title.outputs.error_message }}
+            ```
+
+      - if: ${{ steps.lint_pr_title.outputs.error_message == null }}
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: pr-title-lint-error
+          delete: true
