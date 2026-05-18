@@ -10,6 +10,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/healthiermo?useSSL=true&useLegacyDatetimeCode=false&serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: ${SPRING_DATASOURCE_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      ADMIN_USER_NAME: ${ADMIN_USER_NAME}
+      ADMIN_USER_PASSWORD: ${ADMIN_USER_PASSWORD}
     depends_on:
       db:
         condition: service_healthy
