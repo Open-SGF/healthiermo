@@ -54,17 +54,18 @@ public class TextBox {
 
     @Id
     @NotBlank
-    @Column(columnDefinition="TEXT")
+    @Column(length = 255, nullable = false)
     private String box;
 
     @Id
     @NotBlank
-    @Column(columnDefinition="TEXT")
+    @Column(length = 255, nullable = false)
     private String pie;
 
     @NotBlank
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String text;
 
     public TextBox() {}
