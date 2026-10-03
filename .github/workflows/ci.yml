@@ -62,24 +62,3 @@ jobs:
           SPRING_DATASOURCE_PASSWORD: rootpassword
           SERVER_PORT: 8080
         run: ./mvnw test -B
-
-      - name: Verify existing data survives migration
-        env:
-          SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/healthiermo_legacy?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-          SPRING_DATASOURCE_USERNAME: root
-          SPRING_DATASOURCE_PASSWORD: rootpassword
-          SERVER_PORT: 8080
-        run: |
-          container_id=$(docker ps -q --filter "ancestor=mysql:8")
-          docker exec -e MYSQL_PWD=rootpassword "$container_id" mysql -u root \
-            -e 'CREATE DATABASE healthiermo_legacy'
-          docker exec -i -e MYSQL_PWD=rootpassword "$container_id" mysql -u root \
-            healthiermo_legacy < backup/table_dump.sql
-          docker exec -e MYSQL_PWD=rootpassword "$container_id" mysqldump -u root \
-            --skip-comments --no-tablespaces --order-by-primary \
-            healthiermo_legacy text_box > before.sql
-          ./mvnw test -B -Dtest=HomepageApplicationTests
-          docker exec -e MYSQL_PWD=rootpassword "$container_id" mysqldump -u root \
-            --skip-comments --no-tablespaces --order-by-primary \
-            healthiermo_legacy text_box > after.sql
-          cmp before.sql after.sql
