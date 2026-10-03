@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3-eclipse-temurin-24 AS build
+FROM maven:3.10.0-eclipse-temurin-25 AS build
 WORKDIR /app
 
 # Copy pom.xml and download dependencies
